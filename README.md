@@ -1,146 +1,77 @@
-# 🛡️ Face Match 1:1 com Anti‑Spoofing e Detecção de Deepfake
+# 🛡️ Face Match Guard: The Identity Fortress
 
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Python Power](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![Made with DeepFace](https://img.shields.io/badge/Made%20with-DeepFace-orange)](https://github.com/serengil/deepface)
 
-Um sistema de verificação de identidade que não apenas compara duas faces, mas também determina se cada imagem é **autêntica** (pessoa real, ao vivo) ou se trata de uma **falsificação** – foto de rede social, montagem, ataque de apresentação ou deepfake gerado por IA.
-
-> Este repositório é um estudo prático sobre as três camadas de defesa necessárias para um `Face Match` confiável, utilizando apenas ferramentas **open source**.
-
----
-
-## 📋 Tabela de Conteúdos
-
-- [Visão Geral](#visão-geral)
-- [Motivação](#motivação)
-- [Arquitetura em Camadas](#arquitetura-em-camadas)
-  - [Nível 1: Comparação Robusta de Faces](#nível-1-comparação-robusta-de-faces)
-  - [Nível 2: Análise de Vivacidade e Anti‑Spoofing](#nível-2-análise-de-vivacidade-e-anti-spoofing)
-  - [Nível 3: Detecção de Deepfakes e Montagens](#nível-3-detecção-de-deepfakes-e-montagens)
-- [Tecnologias e Bibliotecas](#tecnologias-e-bibliotecas)
-- [Instalação e Configuração](#instalação-e-configuração)
-- [Uso Básico](#uso-básico)
-- [Exemplos e Resultados](#exemplos-e-resultados)
-- [Datasets e Treinamento](#datasets-e-treinamento)
-- [Roadmap e Contribuições](#roadmap-e-contribuições)
-- [Referências e Leitura Adicional](#referências-e-leitura-adicional)
-- [Licença](#licença)
+> **"No mundo digital, seu rosto é sua chave. Mas e se alguém tentar forjar a chave?"**  
+> Bem-vindo ao **Face Match Guard**, um laboratório de defesa cibernética focado em biometria facial, onde o único limite é o poder do código aberto! 🚀
 
 ---
 
-## 🔍 Visão Geral
+## 🎯 A Missão: Identidade Inviolável
 
-O projeto implementa um **validador de `Face Match 1:1`** que responde a três perguntas fundamentais:
-
-1. **As duas imagens pertencem à mesma pessoa?**
-2. **Cada imagem mostra uma pessoa viva e presente, ou é um ataque (foto de foto, tela, vídeo)?**
-3. **A imagem em si foi manipulada digitalmente (montagem, face swap, deepfake)?**
-
-A resposta final combina os resultados dessas três análises, oferecendo uma pontuação de confiança e detalhando os motivos da decisão.
+Estamos construindo um sistema que não apenas olha para um rosto, mas o **interroga**.  
+Nossa missão é responder com 100% de precisão (e zero ferramentas pagas):
+1.  **Gêmeos Digitais?** (As duas fotos são da mesma pessoa?)
+2.  **Pulsação Real?** (É um humano vivo ou uma foto segurada na frente da câmera?)
+3.  **Ilusão de IA?** (Isso é um Deepfake ou uma montagem digital?)
 
 ---
 
-## 🎯 Motivação
+## 🏰 As 3 Muralhas de Defesa (Camadas da Arquitetura)
 
-Com o avanço da geração de imagens por IA e a facilidade de se obter fotos de redes sociais, a simples comparação biométrica não é suficiente. Um sistema de verificação de identidade moderno precisa de múltiplos níveis de defesa para ser resistente a fraudes.
+Para proteger nossa fortaleza, implementamos três níveis de segurança, cada um com seus próprios "sentinelas" Open Source:
 
-Este repositório nasceu para **estudar e demonstrar** como construir esse tipo de sistema usando apenas código aberto, explorando o estado da arte em visão computacional.
+### 🗡️ Nível 1: O Olho de Argos (Face Match)
+*O sentinela que nunca esquece um rosto.*
+- **Sentinela:** `DeepFace` orquestrando o poderoso `ArcFace`.
+- **Missão:** Gerar um "DNA digital" (embedding) de cada rosto e medir a distância entre eles.
+- **Poder Especial:** Alta resistência a ângulos difíceis e iluminação ruim.
+
+### 🛡️ Nível 2: O Detector de Almas (Anti-Spoofing)
+*O guardião que diferencia a vida do papel.*
+- **Sentinela:** `YOLOv8` customizado + `Fasnet`.
+- **Missão:** Detectar ataques físicos: fotos impressas, telas de celular ou máscaras. Se não piscar ou se a textura for "plana", ele barra!
+- **Poder Especial:** Análise passiva de vivacidade (Liveness Detection).
+
+### 🔮 Nível 3: O Caçador de Ilusões (Deepfake Detection)
+*O mestre que vê através da magia da IA.*
+- **Sentinela:** `deepface-antispoofing` + CNNs treinadas em redes sociais.
+- **Missão:** Encontrar artefatos invisíveis ao olho humano deixados por redes GAN ou modelos de difusão.
+- **Poder Especial:** Desmascarar Face Swaps e manipulações digitais.
 
 ---
 
-## 🏰 Arquitetura em Camadas
+## 🧰 O Arsenal (Tecnologias 100% Open Source)
 
-A defesa é organizada em três níveis, cada um focado em um tipo específico de ameaça.
+| Equipamento | Fornecedor (Lib) | Função |
+| :--- | :--- | :--- |
+| **Radar de Faces** | `Ultralytics (YOLOv8)` | Localiza rostos em milissegundos |
+| **Cérebro Biométrico** | `DeepFace / ArcFace` | A inteligência por trás da comparação |
+| **Visão de Raio-X** | `OpenCV` | Processamento de imagem bruto |
+| **Motor de Lógica** | `Python 3.10+` | Onde a mágica acontece |
 
-### Nível 1: Comparação Robusta de Faces
-*Compara duas faces com alta precisão, mesmo sob variações de pose, iluminação ou expressão.*
-
-- **Detecção facial:** `YOLOv8` (via `ultralytics`) ou `MTCNN`.
-- **Extração de embeddings:** `ArcFace` (loss com margem angular aditiva) como modelo principal, orquestrado pela biblioteca `DeepFace` que também permite ensembles com `FaceNet`, `VGG‑Face`, etc.
-- **Métrica de similaridade:** Distância de cosseno entre embeddings normalizados. Um limiar ajustável determina se as faces são da mesma pessoa.
-
-```python
-from deepface import DeepFace
-
-result = DeepFace.verify(img1_path, img2_path,
-                         model_name='ArcFace',
-                         detector_backend='yolov8',
-                         distance_metric='cosine')
-print(result['verified'], result['distance'])
-
-```
-## Nível 2: Análise de Vivacidade e Anti‑Spoofing
-Determina se o rosto é de uma pessoa real (viva) ou uma tentativa de burla usando foto impressa, tela, vídeo ou máscara 3D.
-
-Abordagem passiva (sem ação do usuário): Utiliza modelos como Fasnet, AttackNetV2 ou as CNNs do MiniVision's Silent Face Anti‑Spoofing (integradas ao DeepFace).
-
-Detector de objetos especializado: O projeto EasyShield v2.5 demonstra o uso de YOLOv12 nano treinado para classificar rostos em real ou spoof, transformando o problema de vivacidade em uma detecção de duas classes. Aqui usamos uma estratégia similar com YOLOv8 e um dataset customizado.
-
-# Fluxo:
-
-A face detectada pelo YOLO é recortada e passada para o modelo de anti‑spoofing.
-
-O modelo retorna um score de vivacidade (0 a 1). Valores abaixo do limiar indicam ataque.
-
-Nível 3: Detecção de Deepfakes e Montagens
-Analisa a imagem como um todo em busca de artefatos de manipulação digital ou geração por IA (redes GAN, diffusion models).
-
-Pacote dedicado: deepface-antispoofing – oferece uma API única para classificar imagens como real, spoof (ataque físico) ou deepfake (ataque digital).
-
-Modelos treinados em datasets sociais: Redes neurais convolucionais (CNNs) treinadas em datasets como So‑Fake‑Set e SocialDF, que contêm imagens adulteradas típicas de redes sociais.
+---
 
 
-## 🧰 Tecnologias e Bibliotecas
-Camada	Ferramentas / Modelos	Descrição
-Detecção facial	YOLOv8 (via ultralytics), MTCNN, OpenCV	Localização do rosto na imagem
-Comparação	DeepFace, ArcFace, FaceNet, VGG‑Face	Geração de embeddings e cálculo de similaridade
-Anti‑Spoofing	Fasnet (DeepFace), AttackNetV2, EasyShield (YOLO‑based)	Detecção de vivacidade passiva
-Deepfake / montagens	deepface-antispoofing, CNNs específicas	Detecção de manipulação digital e ataques de IA
-Orquestração	Python 3.8+, OpenCV, NumPy	Pipeline completo
+## 🗺️ Mapa de Exploração (Roadmap)
+
+- [ ] Construir a base com **DeepFace** e **YOLO**.
+- [ ] Implementar **Anti-Spoofing** (O Detector de Almas).
+- [ ] Integrar detector de **Deepfakes** (O Caçador de Ilusões).
+- [ ] Criar uma **API REST** veloz com FastAPI.
+- [ ] Desenvolver um **Dashboard Cyberpunk** para monitoramento.
+- [ ] Treinar modelos com faces brasileiras (Projeto "Brasil-Face").
+
+---
+
+## 🤝 Junte-se à Guilda!
+
+Este é um projeto de estudo e paixão. Se você ama IA, segurança e a liberdade do código aberto, sinta-se em casa!  
+Dê um `Fork`, suba um `Pull Request` ou simplesmente deixe uma ⭐ para iluminar nossa fortaleza.
 
 
-Datasets e Treinamento
-Para reproduzir ou melhorar os modelos, utilizamos (ou recomendamos) os seguintes datasets públicos:
-
-Anti‑Spoofing: CASIA‑SURF, OULU‑NPU, SiW, UniAttackData (ICCV 2025, com ataques físicos e digitais).
-
-Deepfake: So‑Fake‑Set, SocialDF, Celeb‑DF, FaceForensics++.
-
-Face Match: LFW, CPLFW, AgeDB (usados para benchmark, não para treino).
-
-Os scripts de treinamento estão na pasta training/ (em construção).
-
-🗺️ Roadmap e Contribuições
-Pipeline básico de comparação com DeepFace e YOLO
-
-Integração de anti‑spoofing passivo (Fasnet / EasyShield)
-
-Detecção de deepfake via deepface-antispoofing
-
-Suporte a vídeo (análise temporal)
-
-API REST com FastAPI
-
-Dashboard de visualização dos resultados
-
-Fine‑tuning dos modelos com datasets brasileiros (RG, CNH)
-
-Contribuições são muito bem‑vindas! Veja o arquivo CONTRIBUTING.md.
-
-📖 Referências e Leitura Adicional
-DeepFace: Face Recognition Library
-
-ArcFace: Additive Angular Margin Loss
-
-EasyShield: Lightweight Anti‑Spoofing with YOLO
-
-Silent Face Anti‑Spoofing (MiniVision)
-
-deepface-antispoofing package
-
-So‑Fake‑Set: A Large Scale Dataset of Social Media Fake Images
-
-📄 Licença
-Este projeto está sob a licença MIT – veja o arquivo LICENSE para detalhes.
-
-💡 Este repositório é um estudo acadêmico/pessoal. Para uso em produção, valide os modelos com conjuntos de dados adequados ao seu domínio e siga as regulamentações de proteção de dados (LGPD).
+---
+*Feito com ❤️ por um estudante apaixonado por Visão Computacional.*
